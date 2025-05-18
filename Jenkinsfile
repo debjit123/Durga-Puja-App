@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        BACKEND_DIR = "backend"
-        FRONTEND_DIR = "frontend"
+        BACKEND_DIR = "durgapuja-backend"
+        FRONTEND_DIR = "durgapuja-ui"
     }
 
     stages {
@@ -16,7 +16,7 @@ pipeline {
         stage('Build Backend') {
             steps {
                 dir("${BACKEND_DIR}") {
-                    sh './mvnw clean package -DskipTests'
+                   sh 'mvn clean package -DskipTests'
                 }
             }
         }

@@ -4,20 +4,15 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git 'https://github.com/debjit123/Durga-Puja-App'
             }
         }
 
         stage('Build Backend') {
             steps {
-                sh 'mvn clean package -DskipTests'
-            }
-        }
-
-        stage('Deploy Backend') {
-            steps {
-                sh 'pkill -f "springboot-react-app" || true'
-                sh 'nohup java -jar target/*.jar > springboot-react-app.log 2>&1 &'
+                dir('durgapuja-backend') {
+                    sh 'mvn clean package -DskipTests'
+                }
             }
         }
     }

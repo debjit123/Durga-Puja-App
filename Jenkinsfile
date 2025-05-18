@@ -1,35 +1,45 @@
 pipeline {
     agent any
 
+    environment {
+        BACKEND_DIR = "backend"
+        FRONTEND_DIR = "frontend"
+    }
+
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/your-user/springboot-react-ci-cd.git'
+                git branch: 'main', url: 'https://github.com/debjit123/Durga-Puja-App'
             }
         }
 
-        stage('Build React Frontend') {
+        stage('Build Backend') {
             steps {
-                dir('frontend') {
+                dir("${BACKEND_DIR}") {
+                    sh './mvnw clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                dir("${FRONTEND_DIR}") {
                     sh 'npm install'
                     sh 'npm run build'
                 }
             }
         }
 
-        stage('Build Spring Boot Backend') {
-            steps {
-                dir('backend') {
-                    sh 'mvn clean package -DskipTests'
-                }
-            }
-        }
-
         stage('Deploy') {
             steps {
-                sh 'cp -r frontend/build/* /home/ec2-user/app/frontend/'
-                sh 'cp backend/target/*.jar /home/ec2-user/app/backend/app.jar'
-                sh 'nohup java -jar /home/ec2-user/app/backend/app.jar --server.port=8081 > /home/ec2-user/app/backend/log.txt 2>&1 &'
+                // kill running app if exists
+                sh 'pkill -f "springboot-react-app" || true'
+
+                // run backend
+                sh 'nohup java -jar backend/target/*.jar > springboot-react-app.log 2>&1 &'
+
+                // copy React build to nginx (assumes /var/www/html is nginx root)
+                sh 'sudo cp -r frontend/build/* /var/www/html/'
             }
         }
     }

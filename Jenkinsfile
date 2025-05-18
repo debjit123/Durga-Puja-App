@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/your-user/springboot-react-ci-cd.git'
+                git 'https://github.com/debjit123/Durga-Puja-App'
             }
         }
 

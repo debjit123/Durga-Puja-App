@@ -2,12 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/debjit123/Durga-Puja-App'
-            }
-        }
-
         stage('Build Backend') {
             steps {
                 dir('durgapuja-backend') {

@@ -20,9 +20,9 @@ pipeline {
         stage('Deploy Frontend') {
             steps {
                 sh '''
-                    sudo -S rm -rf /var/www/html/*
-                    sudo cp -r durgapuja-ui/build/* /var/www/html/
-                    sudo systemctl restart nginx
+                   sudo mkdir -p /var/www/html
+                   sudo rm -rf /var/www/html/*
+                   sudo cp -r durgapuja-ui/build/* /var/www/html/
                 '''
             }
         }

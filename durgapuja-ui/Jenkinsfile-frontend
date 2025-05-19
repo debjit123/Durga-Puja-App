@@ -20,9 +20,11 @@ pipeline {
         stage('Deploy Frontend') {
             steps {
                 sh '''
-                    sudo rm -rf /var/www/html/*
+                    sudo -S rm -rf /var/www/html/*
                     sudo cp -r build/* /var/www/html/
                     sudo systemctl restart nginx
+                    echo YOUR_SUDO_PASSWORD
+
                 '''
             }
         }

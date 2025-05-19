@@ -10,7 +10,7 @@ pipeline {
 
         stage('Build Frontend') {
             steps {
-                dir('frontend') {
+                dir('durgapuja-ui') {
                     sh 'npm install'
                     sh 'npm run build'
                 }

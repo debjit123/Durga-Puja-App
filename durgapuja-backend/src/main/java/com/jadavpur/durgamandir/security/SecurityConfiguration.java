@@ -20,18 +20,20 @@ public class SecurityConfiguration {
 	    }
 
 	    @Bean
-	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	        http.csrf(csrf -> csrf.disable())
-	            .authorizeHttpRequests(authorize -> authorize
-	                .requestMatchers(HttpMethod.POST,"/login").permitAll()
-	                .requestMatchers("/expense/add-expense").hasRole("ADMIN")
-	                .anyRequest().authenticated() // All other endpoints require authentication
-	            )
-	            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session
-	            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers("/login").permitAll()
+            .requestMatchers("/expense/add-expense").hasRole("ADMIN")
+            .anyRequest().authenticated()
+        )
+        .formLogin(form -> form.disable()) // ❗ DISABLE form login
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-	        return http.build();
-	    }
+    return http.build();
+}
+
 
 	    @Bean
 	    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

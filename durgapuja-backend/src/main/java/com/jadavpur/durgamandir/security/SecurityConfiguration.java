@@ -23,17 +23,15 @@ public class SecurityConfiguration {
 	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	        http.csrf(csrf -> csrf.disable())
 	            .authorizeHttpRequests(authorize -> authorize
-	                .requestMatchers("/login").permitAll()
+	                .requestMatchers(HttpMethod.POST,"/login").permitAll()
 	                .requestMatchers("/expense/add-expense").hasRole("ADMIN")
-	                .anyRequest().authenticated()
+	                .anyRequest().authenticated() // All other endpoints require authentication
 	            )
-	            .formLogin(form -> form.disable()) // ❗ DISABLE form login
-	            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-	            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+	            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session
+	            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
 
 	        return http.build();
 	    }
-
 
 	    @Bean
 	    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

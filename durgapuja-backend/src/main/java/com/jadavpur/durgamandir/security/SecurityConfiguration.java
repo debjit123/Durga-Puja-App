@@ -24,7 +24,6 @@ public class SecurityConfiguration {
 	        http.csrf(csrf -> csrf.disable())
 	            .authorizeHttpRequests(authorize -> authorize
 	                .requestMatchers(HttpMethod.POST,"/login").permitAll()
-	                .requestMatchers(HttpMethod.GET, "/login").permitAll()
 	                .requestMatchers("/expense/add-expense").hasRole("ADMIN")
 	                .anyRequest().authenticated() // All other endpoints require authentication
 	            )

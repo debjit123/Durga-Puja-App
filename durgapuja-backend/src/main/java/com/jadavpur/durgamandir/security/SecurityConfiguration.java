@@ -23,9 +23,7 @@ public class SecurityConfiguration {
 	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	        http.csrf(csrf -> csrf.disable())
 	            .authorizeHttpRequests(authorize -> authorize
-	                .requestMatchers(HttpMethod.POST,"/login").permitAll()
-	                .requestMatchers("/expense/add-expense").hasRole("ADMIN")
-	                .anyRequest().authenticated() // All other endpoints require authentication
+	                .anyRequest().permitAll() // All other endpoints require authentication
 	            )
 	            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session
 	            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
